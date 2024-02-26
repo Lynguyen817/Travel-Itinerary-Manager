@@ -12,8 +12,12 @@
     <div class="container">
         <h1>Add a New Destination to Favorite List</h1>
         <form method="post" action="{{ url_for('add_destination', user_id=user_id) }}">
-            <label for="title">Place's Name</label>
-            <input type="text" id="title" name="title" placeholder="Enter the name of the place" required>
+            <label for="des_name">Place's Name</label>
+            <input type="text" id="des_name" name="des_name" placeholder="Enter the name of the place" required>
+
+            <label for="poster_url">Posters</label>
+            <textarea id="poster_url" name="poster_url" placeholder="Posters"></textarea>
+
 
             <label for="activities">Activities</label>
             <textarea id="activities" name="activities" placeholder="List activities available at the destination"></textarea>
@@ -21,8 +25,8 @@
             <label for="accommodations">Accommodations</label>
             <textarea id="accommodations" name="accommodations" placeholder="Describe available accommodations"></textarea>
 
-            <label for="transportations">Transportations</label>
-            <textarea id="transportations" name="transportations" placeholder="Provide transportation details"></textarea>
+            <label for="transportation">Transportations</label>
+            <textarea id="transportation" name="transportation" placeholder="Provide transportation details"></textarea>
 
             <input type="submit" value="Add Destination">
         </form>

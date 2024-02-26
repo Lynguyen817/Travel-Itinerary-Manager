@@ -8,6 +8,29 @@
     <title>Document</title>
 </head>
 <body>
-
+     <div class="container">
+        <h1>{{ user.username }}'s Destinations</h1>
+        <div class="destination-list">
+            {% if list_of_destinations %}
+                {% for destination in list_of_destinations %}
+                    <div class="destination">
+                        <h2>{{ destination.des_name }}</h2>
+                        <img src="{{ destination.poster_url }}" alt="Poster">
+                        <div class="details">
+                            <p><strong>Activities:</strong> {{ destination.activities }}</p>
+                            <p><strong>Accommodations:</strong> {{ destination.accommodations }}</p>
+                            <p><strong>Transportation:</strong> {{ destination.transportation }}</p>
+                        </div>
+                        <form action="/delete_destination/{{ destination.id }}" method="POST">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No destinations found.</p>
+            {% endif %}
+        </div>
+        <a href="/">Back to Home</a>
+    </div>
 </body>
 </html>

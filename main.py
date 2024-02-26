@@ -58,7 +58,7 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        return jsonify({'message': 'User registered successfully.'})
+        return redirect(url_for('login'))
     else:
         # If it's a GET request, render the register page
         return render_template('register.html')
@@ -97,7 +97,10 @@ def get_destinations():
     if list_of_destinations is None:
         list_of_destinations = []
 
-    return render_template('user_destinations.html', user_id=current_user.id, list_of_destinations=list_of_destinations)
+    # Retrieve the current user
+    user = current_user
+
+    return render_template('user_destinations.html', user=user, list_of_destinations=list_of_destinations)
 
 
 @app.route('/add_destination', methods=['GET', 'POST'])
@@ -105,13 +108,16 @@ def get_destinations():
 def add_destination():
     """Search for a destination and add it to a user's favorite destination list."""
     if request.method == 'POST':
-        data = request.get_json()
+        # Print out the form data to inspect it
+        print("From Data:", request.form)
+
+        # Extract the destination data from the form
         destination_data = {
-            'des_name': data['des_name'],
-            'poster_url': data['poster_url'],
-            'activities': data['activities'],
-            'accommodations': data['accommodations'],
-            'transportation': data['transportation']
+            'des_name': request.form['des_name'],
+            'poster_url': request.form['poster_url'],
+            'activities': request.form['activities'],
+            'accommodations': request.form['accommodations'],
+            'transportation': request.form['transportation']
         }
 
         if not destination_data['des_name']:
