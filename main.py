@@ -100,6 +100,13 @@ def get_destinations():
     # Retrieve the current user
     user = current_user
 
+    # Iterate through destinations and replace newline characters with <br> tags
+    for destination in list_of_destinations:
+        destination.activities = destination.activities.replace("\n", "<br>")
+        destination.accommodations = destination.accommodations.replace("\n", "<br>")
+        destination.transportation = destination.transportation.replace("\n", "<br>")
+
+
     return render_template('user_destinations.html', user=user, list_of_destinations=list_of_destinations)
 
 
@@ -130,26 +137,29 @@ def add_destination():
     return render_template('add_destination.html', user_id=current_user.id)
 
 
-@app.route('/delete_destination/<destination_id>', methods=['GET', 'POST'])
+@app.route('/delete_destination/<int:user_id>/<int:destination_id>', methods=['GET', 'POST'])
 @login_required
 def delete_destination(user_id, destination_id):
     """Delete a destination from the user's favorite list."""
-    if request.method == 'POST':
-        deleted = data_manager.delete_destination(user_id, destination_id)
-        if deleted:
-            return redirect(url_for('user_destinations', user_id=user_id))
-        else:
-            return "Destination not found"
+    try:
+        if request.method == 'POST':
+            deleted = data_manager.delete_destination(user_id, destination_id)
+            if deleted:
+                return redirect(url_for('get_destinations', user_id=user_id))
+            else:
+                return "Destination not found"
 
-    # Get the destination data
-    list_of_destinations = data_manager.get_destinations(user_id)
-    destination = next((d for d in list_of_destinations if d.id == int(destination_id)), None)
+        # Get the destination data
+        list_of_destinations = data_manager.get_destinations(user_id)
+        destination = next((d for d in list_of_destinations if d.id == int(destination_id)), None)
 
-    if not destination:
-        return "Destination not found."
+        if not destination:
+            return "Destination not found."
 
-    # It's GET request, render the delete page
-    return render_template('delete_destination.html', user_id=user_id)
+        # It's GET request, render the delete page
+        return render_template('delete_destination.html', user_id=user_id)
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
 
 
 @app.route('/update_destination/<destination_id>', methods=['GET', 'POST'])
@@ -178,14 +188,5 @@ if __name__ == "__main__":
 
 
 
-# @app.route('/api/activities', methods=['GET', 'POST'])
-# def handle_activities():
-#     """Returns activities."""
-#     if request.method == 'GET':
-#         return jsonify({'activities': activities})
-#     elif request.method == 'POST':
-#         new_activity = request.get_json()
-#         activities.append(new_activity)
-#         return jsonify({'message': 'Activity added successfully'})
 
 
