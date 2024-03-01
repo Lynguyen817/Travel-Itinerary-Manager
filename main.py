@@ -1,12 +1,10 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for
-#from flask_bootstrap import Bootstrap
 from datamanager.sqlite_data_manager import *
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 import secrets
 import string
 
 app = Flask(__name__, template_folder='templates')
-#bootstrap = Bootstrap(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///travelItineraries.db'
 
@@ -106,7 +104,6 @@ def get_destinations():
         destination.accommodations = destination.accommodations.replace("\n", "<br>")
         destination.transportation = destination.transportation.replace("\n", "<br>")
 
-
     return render_template('user_destinations.html', user=user, list_of_destinations=list_of_destinations)
 
 
@@ -162,24 +159,27 @@ def delete_destination(user_id, destination_id):
         return f"An error occurred: {str(e)}"
 
 
-@app.route('/update_destination/<destination_id>', methods=['GET', 'POST'])
+@app.route('/update_destination/<int:user_id>/<int:destination_id>', methods=['GET', 'POST'])
 @login_required
-def update_destination(destination_id):
+def update_destination(user_id, destination_id):
+    # Get the destination data
+    destination = data_manager.get_destinations(user_id, destination_id)
+    if not destination:
+        return "Destination not found."
+
     if request.method == 'POST':
         new_poster = request.form.get('new_poster')
         new_activities = request.form.get('new_activities')
         new_accommodations = request.form.get('new_accommodations')
         new_transportation = request.form.get('new_transportation')
 
-        updated = data_manager.update_destination(
-            current_user.id, destination_id, new_poster, new_activities, new_accommodations, new_transportation
-        )
-        if updated:
-            return redirect(url_for('get_destinations'))
-        else:
-            return "Destination not found", 400
+        try:
+            data_manager.update_destination(user_id, destination_id, new_poster,new_activities, new_accommodations, new_transportation)
+            return redirect(url_for('get_destinations', user_id=user_id))
+        except ValueError as e:
+            return str(3), 400
 
-    return render_template('update_destination.html', user_id=current_user.id, destination_id=destination_id)
+    return render_template('update_destination.html', user_id=user_id, destination=destination)
 
 
 if __name__ == "__main__":

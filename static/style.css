@@ -40,9 +40,9 @@ nav ul li a:hover {
 
 form {
     max-width: 400px;
-    margin: 0 auto:
+    margin: 0 auto;
     padding: 20px;
-    border: 1pz solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 8px;
 }
 
@@ -65,6 +65,48 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+.grid-destination {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.grid-iem {
+    background-color: #ddd;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.delete, .update {
+    border: none;
+    padding: 5px ;
+    margin-bottom: 5px;
+}
+
+.delete_button, .update_button {
+    width: 100px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.delete_button {
+    background-color: #dc2f2f;
+}
+
+.delete_button:hover {
+    background-color: #fd5959;
+}
+
+.update_button {
+    background-color: #9896f1;
+}
+
+.update_button:hover {
+    background-color: #afc5ff;
 }
 
 main {
@@ -211,4 +253,8 @@ input[type="submit"]:hover {
 .register-container form button[type="submit"],
 .login-container form button[type="submit"]:hover {
     background-color: #0056b3;
+}
+
+.all-destination {
+    background-color: none;
 }

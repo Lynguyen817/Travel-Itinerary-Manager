@@ -6,11 +6,14 @@ class SQLiteDataManager(DataManagerInterface):
     def __init__(self, db):
         self.db = db
 
-    def get_destinations(self, user_id):
-        """Get all user's destinations."""
+    def get_destinations(self, user_id, destination_id=None):
+        """Get all user's destinations or a specific destination."""
         user = User.query.get(user_id)
         if user:
-            return user.favorites
+            if destination_id:
+                return Destination.query.filter_by(user_id=user_id, id=destination_id).first()
+            else:
+                return user.favorites
         else:
             return []
 
@@ -59,6 +62,8 @@ class SQLiteDataManager(DataManagerInterface):
         existing_destination.accommodations = new_accommodations
         existing_destination.transportation = new_transportation
         self.db.session.commit()
+
+
 
 
 

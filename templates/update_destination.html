@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Update Destination</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="update-destination">
+    <div class="container">
+        <h1>Update Destination</h1>
+        <form method="POST" action="/update_destination/{{ user_id }}/{{ destination.id }}">
+            <label for="new_poster">New Poster URL</label>
+            <textarea id="new_poster" name="new_poster">{{ destination.poster_url }}</textarea>
+
+            <label for="new_activities">New Activities</label>
+            <textarea id="new_activities" name="new_activities">{{ destination.activities }}</textarea>
+
+            <label for="new_accommodations">New Accommodations</label>
+            <textarea id="new_accommodations" name="new_accommodations">{{ destination.accommodations }}</textarea>
+
+            <label for="new_transportation">New Transportations</label>
+            <textarea id="new_transportation" name="new_transportation">{{ destination.transportation }}</textarea>
+
+            <input type="submit" value="Update">
+        </form>
+    </div>
+
+</body>
+</html>

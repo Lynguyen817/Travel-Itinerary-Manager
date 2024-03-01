@@ -6,23 +6,32 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-     <div class="container">
+     <div class="all-destinations">
         <h1>{{ user.username }}'s Destinations</h1>
         <div class="destination-list">
             {% if list_of_destinations %}
                 {% for destination in list_of_destinations %}
-                    <div class="destination">
+                    <div class="grid-destination">
                         <h2>{{ destination.des_name }}</h2>
-                        <img src="{{ destination.poster_url }}" width=100% alt="Poster">
-                        <div class="details">
-                            <p><strong>Activities:</strong> {{ destination.activities | safe}}</p>
-                            <p><strong>Accommodations:</strong> {{ destination.accommodations | safe}}</p>
-                            <p><strong>Transportation:</strong> {{ destination.transportation |safe}}</p>
+                        <div class="grid-item">
+                            <img src="{{ destination.poster_url }}" width=50% alt="Poster">
                         </div>
-                        <form action="/delete_destination/{{ current_user.id }}/{{ destination.id }}" method="POST">
-                            <button type="submit">Delete</button>
+                        <div class="grid-item">
+                            <div class="details">
+                            <p><strong>Activities:</strong><br> {{ destination.activities | safe}}</p>
+                            <p><strong>Accommodations:</strong><br> {{ destination.accommodations | safe}}</p>
+                            <p><strong>Transportation:</strong><br> {{ destination.transportation |safe}}</p>
+                            </div>
+                        </div>
+
+                        <form class="delete" action="/delete_destination/{{ current_user.id }}/{{ destination.id }}" method="POST">
+                            <button  class="delete_button" type="submit">Delete</button>
+                        </form>
+                        <form class="update" action="/update_destination/{{ current_user.id }}/{{ destination.id }}" method="POST">
+                            <button class="update_button" type="submit">Update</button>
                         </form>
                     </div>
                 {% endfor %}
