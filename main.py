@@ -91,20 +91,24 @@ def logout():
 @login_required
 def get_destinations():
     """Return a list of destinations for a given user_id."""
-    list_of_destinations = data_manager.get_destinations(current_user.id)
-    if list_of_destinations is None:
-        list_of_destinations = []
+    try:
+        list_of_destinations = data_manager.get_destinations(current_user.id)
+        if list_of_destinations is None:
+            list_of_destinations = []
 
-    # Retrieve the current user
-    user = current_user
+        # Retrieve the current user
+        user = current_user
 
-    # Iterate through destinations and replace newline characters with <br> tags
-    for destination in list_of_destinations:
-        destination.activities = destination.activities.replace("\n", "<br>")
-        destination.accommodations = destination.accommodations.replace("\n", "<br>")
-        destination.transportation = destination.transportation.replace("\n", "<br>")
+        # Iterate through destinations and replace newline characters with <br> tags
+        for destination in list_of_destinations:
+            destination.activities = destination.activities.replace("\n", "<br>")
+            destination.accommodations = destination.accommodations.replace("\n", "<br>")
+            destination.transportation = destination.transportation.replace("\n", "<br>")
 
-    return render_template('user_destinations.html', user=user, list_of_destinations=list_of_destinations)
+        return render_template('user_destinations.html', user=user, list_of_destinations=list_of_destinations)
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return f"An error occurred: {str(e)}", 500
 
 
 @app.route('/add_destination', methods=['GET', 'POST'])
@@ -142,21 +146,15 @@ def delete_destination(user_id, destination_id):
         if request.method == 'POST':
             deleted = data_manager.delete_destination(user_id, destination_id)
             if deleted:
-                return redirect(url_for('get_destinations', user_id=user_id))
+                # After deleting, redirect to the get_destinations route
+                print("Redirecting to get_destinations route")
+                return redirect(url_for('get_destinations'))
             else:
-                return "Destination not found"
-
-        # Get the destination data
-        list_of_destinations = data_manager.get_destinations(user_id)
-        destination = next((d for d in list_of_destinations if d.id == int(destination_id)), None)
-
-        if not destination:
-            return "Destination not found."
-
-        # It's GET request, render the delete page
-        return render_template('delete_destination.html', user_id=user_id)
+                print("Destination not found.")
+                return "Destination not found", 404
     except Exception as e:
-        return f"An error occurred: {str(e)}"
+        print(f"An error occurred:")
+        return f"An error occurred: {str(e)}", 500
 
 
 @app.route('/update_destination/<int:user_id>/<int:destination_id>', methods=['GET', 'POST'])
