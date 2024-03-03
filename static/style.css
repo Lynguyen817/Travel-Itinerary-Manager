@@ -67,48 +67,6 @@ button:hover {
     background-color: #0056b3;
 }
 
-.grid-destination {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-gap: 10px;
-    padding: 10px;
-}
-
-.grid-iem {
-    background-color: #ddd;
-    padding: 20px;
-    border-radius: 8px;
-}
-
-.delete, .update {
-    border: none;
-    padding: 5px ;
-    margin-bottom: 5px;
-}
-
-.delete_button, .update_button {
-    width: 100px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.delete_button {
-    background-color: #dc2f2f;
-}
-
-.delete_button:hover {
-    background-color: #fd5959;
-}
-
-.update_button {
-    background-color: #9896f1;
-}
-
-.update_button:hover {
-    background-color: #afc5ff;
-}
-
 main {
     padding: 20px;
 }
@@ -257,4 +215,73 @@ input[type="submit"]:hover {
 
 .all-destination {
     background-color: none;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.destination-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.grid-destination {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.grid-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-item img {
+    width: 100%;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.details p {
+    margin-bottom: 10px;
+}
+
+.delete, .update {
+    margin-top: 5px;
+    padding: 5px;
+    border: none;
+}
+
+.delete_button, .update_button {
+    background-color: transparent;
+    width: 100px;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    outline: none;
+}
+
+.delete_button {
+    background-color: #dc2f2f;
+}
+
+.delete_button:hover {
+    background-color: #fd5959;
+}
+
+.update_button {
+    background-color: #9896f1;
+}
+
+.update_button:hover {
+    background-color: #afc5ff;
+}
+
+.goback {
+    padding: 20px;
+    text-decoration: none;
 }
