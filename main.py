@@ -166,13 +166,19 @@ def update_destination(user_id, destination_id):
         return "Destination not found."
 
     if request.method == 'POST':
+        print("Form data:", request.form)
         new_poster = request.form.get('new_poster')
         new_activities = request.form.get('new_activities')
         new_accommodations = request.form.get('new_accommodations')
         new_transportation = request.form.get('new_transportation')
 
         try:
-            data_manager.update_destination(user_id, destination_id, new_poster,new_activities, new_accommodations, new_transportation)
+            if new_poster is not None:
+                data_manager.update_destination(user_id, destination_id, new_poster, new_activities, new_accommodations, new_transportation)
+            else:
+                print("New Poster URL is empty.")
+                return "New Poster URL cannot be empty.", 400
+
             return redirect(url_for('get_destinations', user_id=user_id))
         except ValueError as e:
             return str(3), 400

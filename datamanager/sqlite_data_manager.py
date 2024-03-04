@@ -43,7 +43,7 @@ class SQLiteDataManager(DataManagerInterface):
         """Delete a destination from the database."""
         destination = Destination.query.filter_by(user_id=user_id, id=destination_id).first()
         if not destination:
-            raise False
+            return False
 
         print("Deleting destination", destination)
 
@@ -56,7 +56,7 @@ class SQLiteDataManager(DataManagerInterface):
         """Update an existing destination."""
         existing_destination = Destination.query.filter_by(user_id=user_id, id=destination_id).first()
         if not existing_destination:
-            raise ValueError("Destination not found.")
+            return False
 
         existing_destination.poster_url = new_poster
         existing_destination.activities = new_activities
@@ -64,6 +64,7 @@ class SQLiteDataManager(DataManagerInterface):
         existing_destination.transportation = new_transportation
         self.db.session.commit()
         print("Destination updated successfully.")
+
 
 
 
