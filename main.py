@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for
 from datamanager.sqlite_data_manager import *
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_bootstrap import Bootstrap
 import secrets
 import string
 
 app = Flask(__name__, template_folder='templates')
+bootstrap = Bootstrap(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///travelItineraries.db'
 
@@ -167,21 +169,26 @@ def update_destination(user_id, destination_id):
 
     if request.method == 'POST':
         print("Form data:", request.form)
-        new_poster = request.form.get('new_poster')
-        new_activities = request.form.get('new_activities')
-        new_accommodations = request.form.get('new_accommodations')
-        new_transportation = request.form.get('new_transportation')
+        new_poster = request.form.get('poster_url')
+        new_activities = request.form.get('activities')
+        new_accommodations = request.form.get('accommodations')
+        new_transportation = request.form.get('transportation')
 
-        try:
-            if new_poster is not None:
-                data_manager.update_destination(user_id, destination_id, new_poster, new_activities, new_accommodations, new_transportation)
-            else:
-                print("New Poster URL is empty.")
-                return "New Poster URL cannot be empty.", 400
-
-            return redirect(url_for('get_destinations', user_id=user_id))
-        except ValueError as e:
-            return str(3), 400
+        # if new_poster is None or not new_poster.strip():
+        #     print("New Poster URL is empty.")
+        #     return "New Poster URL cannot be empty.", 400
+        #
+        # try:
+        #     data_manager.update_destination(user_id, destination_id, new_poster, new_activities, new_accommodations, new_transportation)
+        #     return redirect(url_for('get_destinations', user_id=user_id))
+        #
+        # except ValueError as e:
+        #     return str(e), 400
+        updated = data_manager.update_destination(user_id, destination_id, new_poster, new_activities, new_accommodations, new_transportation)
+        if updated:
+            return redirect(url_for('get_destination', user_id=user_id))
+        else:
+            return "Destination not found", 404
 
     return render_template('update_destination.html', user_id=user_id, destination=destination)
 

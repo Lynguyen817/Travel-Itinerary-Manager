@@ -17,7 +17,6 @@ export default function App() {
 
   useEffect(() => {
     // Check if the user is already logged in
-    // You might need to implement a backend endpoint for checking the authentication status
     axios.get('/api/check-auth')
       .then(response => {
         setUser(response.data.user);
