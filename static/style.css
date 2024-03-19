@@ -4,8 +4,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
-    background-image: url("/static/images/travel5.jpg");
+    background-image: url("/static/images/travel6.jpg");
+    background-color: #bae8e8;
     background-size: cover;
     background-position: center;
 }
@@ -35,6 +35,20 @@ nav ul li a {
 
 nav ul li a:hover {
     text-decoration: underline;
+}
+
+h2 {
+  font-family: "Madimi One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 40px;
+  margin-top: 35px;
+}
+
+.travel-emoji {
+    width: 80px;
+    margin-left: 40px;
+    border-radius: 8px;
 }
 
 form {
@@ -70,38 +84,19 @@ main {
     padding: 20px;
 }
 
-.featured-destinations {
-    margin: 20px 0;
-    padding: 20px;
-    background-color: #fff;
+.square-container {
+    width: 300px;
+    height: 300px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 5px;
 }
 
-.featured-destinations h2 {
-    margin-top: 0;
-}
-
-.destination-card {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.destination-card .card{
-    width: 30%;
-    margin-bottom: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.destination-card .card img{
-    max-width: 100%;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
-
-.destination-card .card .card-content{
-    padding: 10px;
+.square-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .about {
@@ -253,7 +248,7 @@ input[type="submit"]:hover {
 }
 
 .grid-destination {
-    background-color: #f9f9f9;
+    background: radial-gradient(circle at 7.5% 24%, rgb(237, 161, 193) 0%, rgb(250, 178, 172) 25.5%, rgb(190, 228, 210) 62.3%, rgb(215, 248, 247) 93.8%);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
