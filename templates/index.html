@@ -21,6 +21,7 @@
                         <ul>
                             <li><a href="/">Home</a></li>
                             {% if current_user.is_authenticated %}
+                                <li>Hi, {{ current_user.username }}</li>
                                 <li><a href="/logout">Logout</a></li>
                                 <li><a href="/get_destinations">My Destinations</a></li>
                                 <li><a href="/add_destination">Add Destination</a></li>

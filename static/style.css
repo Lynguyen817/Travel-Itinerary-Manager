@@ -235,11 +235,15 @@ input[type="submit"]:hover {
     background-color: #0056b3;
 }
 
-.all-destination {
-    background-color: none;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+.all-destinations {
+    background-image: url("/static/images/travel4.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.all-destinations h1 {
+    color: #fff;
+    font-size: 40px;
 }
 
 .destination-list {
@@ -304,7 +308,7 @@ input[type="submit"]:hover {
 }
 
 .goback {
-    padding: 15px;
+    padding: 20px;
     text-decoration: none;
     color: #fff;
     font-size: 18px;
