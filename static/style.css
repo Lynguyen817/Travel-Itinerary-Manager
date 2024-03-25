@@ -34,11 +34,21 @@ nav ul li a {
     font-family: "Whisper", cursive;
     font-weight: 400;
     font-style: normal;
-    font-size: 30px;
 }
 
 nav ul li a:hover {
     text-decoration: underline;
+}
+
+.nav-item {
+    font-size: 25px;
+}
+
+#dropdownMenuButton{
+    font-family: "Whisper", cursive;
+    font-size: 25px;
+    background: none;
+    border: none;
 }
 
 .title {

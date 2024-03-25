@@ -1,14 +1,40 @@
-from flask import Flask, jsonify, request, render_template, redirect, url_for
+import os
+from flask import Flask, jsonify, request, render_template, redirect, url_for, session
 from datamanager.sqlite_data_manager import *
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_bootstrap import Bootstrap
+from flask_babel import Babel
+from google.cloud import translate_v2 as translate
 import secrets
 import string
+import logging
+import requests
 
 app = Flask(__name__, template_folder='templates')
 bootstrap = Bootstrap(app)
+babel = Babel(app)
+
+app.logger.setLevel(logging.DEBUG)
+app.logger.addHandler(logging.StreamHandler())
+
+babel_logger = logging.getLogger('flask_babel')
+babel_logger.setLevel(logging.DEBUG)
+babel_logger.addHandler(logging.StreamHandler())
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///travelItineraries.db'
+app.config['BABEL_TRANSLATION_DIRECTORIES'] = os.path.join(app.root_path, 'translations')
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+app.config['LANGUAGES'] = {
+    'en': 'English',
+    'fr': 'French',
+    'es': 'Spanish',
+    'de': 'German',
+    'it': 'Italian',
+    'zh': 'Chinese',
+    'ja': 'Japanese',
+    'ru': 'Russian'
+}
+
 
 db.init_app(app)
 with app.app_context():
@@ -33,6 +59,74 @@ print("Generated secret key:", secret_key)
 app.secret_key = secret_key
 
 
+@app.before_request
+def before_request():
+    # Set the language for each request based on the session
+    session_language = session.get('language', 'en')
+    babel.locale = session_language
+    print("Session Language:", session_language)
+
+
+@app.context_processor
+def utility_processor():
+    def get_user_locale():
+        # Get the language from the session, or use the default language
+        return session.get('language', 'en')
+
+    # Return a dictionary containing the functions to make it available in templates
+    return dict(get_user_locale=get_user_locale)
+
+
+@app.route('/set_language/<language>')
+def set_language(language):
+    # Store the selected language in the session
+    session['language'] = language
+    print("Session data after setting language:", session)
+    print("Referrer URL", request.referrer)
+
+    return redirect(request.referrer or url_for('index'))
+
+
+API_KEY = os.environ.get('GOOGLE_TRANSLATE_API_KEY')
+url = 'https://translation.googleapis.com/language/translate/v2?key={API_KEY}'
+
+
+@app.route('/')
+def translate():
+    text_to_translate = request.args.get('text', default='', type=str)
+    target_language = request.args.get('target_language', default='', type=str)
+
+    if text_to_translate and target_language:
+        translated_text = translate_text(text_to_translate, target_language)
+        if translated_text:
+            return f"Translated text: {translated_text}"
+        else:
+            return "Translation request failed", 500
+    else:
+        return "Please provide text and target_language parameters", 400
+
+
+def translate_text(text, target_language):
+    params = {
+        'key': API_KEY,
+        'q': text,
+        'target': target_language
+    }
+    response = requests.post(url, params=params)
+    if response.status_code == 200:
+        translated_text = response.json()['data']['translations'][0]['translatedText']
+        return translated_text
+    else:
+        print(f"Translation request failed: {response.text}")
+        return None
+
+
+text_to_translate = "Hello, world!"
+target_language = "fr"  # French
+translated_text = translate_text(text_to_translate, target_language)
+print(translated_text)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -41,6 +135,7 @@ def load_user(user_id):
 @app.route('/')
 def index():
     """Returns homepage, alerts error when it's not open."""
+    print("Session data in index route:", session)
     try:
         return render_template("index.html", activities=activities, accommodations=accommodations, transportation=transportation, current_user=current_user)
     except Exception as e:

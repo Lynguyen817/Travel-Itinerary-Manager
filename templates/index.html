@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ get_user_locale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -18,32 +18,50 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6 fs-2 title">
-                    <span class="fs-2">🛫 </span>Travel Itinerary Manager
+                    <span class="fs-2">🛫 </span>{{ 'Travel Itinerary Manager' }}
                 </div>
                 <div class="col-md-6">
-                    <nav>
-                        <ul>
-                            <li><a href="/">Home</a></li>
-                            {% if current_user.is_authenticated %}
-                                <li><a href="">Hi, {{ current_user.username }}</a></li>
-                                <li><a href="/logout">Logout</a></li>
-                                <li><a href="/get_destinations">My Destinations</a></li>
-                                <li><a href="/add_destination">Add Destination</a></li>
-                            {% else %}
-                                <li><a href="/login">Login</a></li>
-                                <li><a href="/register">Register</a></li>
-                            {% endif %}
-                        </ul>
+                    <nav class="navbar navbar-expand-md navbar-light justify-content-end">
+                        <div class="collapse navbar-collapse" id="b=navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item"><a class="nav-link" href="/">{{ 'Home' }}</a></li>
+                                {% if current_user.is_authenticated %}
+                                    <li class="nav-item"><a class="nav-link" href="">{{ 'Hi,' }} {{ current_user.username }}</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/logout">{{ 'Logout' }}</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/get_destinations">{{ 'My Destinations' }}</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/add_destination">{{ 'Add Destination' }}</a></li>
+                                {% else %}
+                                    <li class="nav-item"><a class="nav-link" href="/login">{{ 'Login' }}</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/register">{{ 'Register' }}</a></li>
+                                {% endif %}
+                                <li class="nav-item dropdown">
+                                  <a class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    {{ 'Language' }}
+                                  </a>
+                                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <li><a class="dropdown-item" href="/set_language/en">English</a></li>
+                                    <li><a class="dropdown-item" href="/set_language/fr">French</a></li>
+                                    <li><a class="dropdown-item" href="/set_language/es">Spanish</a></li>
+                                    <li><a class="dropdown-item" href="/set_language/de">German</a></li>
+                                    <li><a class="dropdown-item" href="/set_language/it">Italian</a></li>
+                                    <li><a class="dropdown-item" href="/set_language/zh">Chinese</a></li>
+                                    <li><a class="dropdown-item" href="/set_language/ja">Japanese</a></li>
+                                    <li><a class="dropdown-item" href="/set_language/ru">Russian</a></li>
+                                  </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </nav>
                 </div>
             </div>
         </div>
     </header>
     <main>
+        <p>{{ 'Current Language:' }} {{ get_user_locale() }}</p>
        <div class="cover-container">
             <div class="row">
                 <div class="col-md-6">
-                    <h2>Where would you like to go?</h2>
+                    <h2>{{ 'Where would you like to go?' }}</h2>
                     <img class="travel-emoji" src="https://www.smileysapp.com/emojis/traveling-emoji.png" alt="traveling-smiley">
                 </div>
                 <div class="col-md-6 square-container">
@@ -51,13 +69,14 @@
             </div>
         </div>
         <section class="about">
-            <h3 class="fw-normal">About Travel Itinerary Manager</h3>
-            <p class="fst-italic"> This is a web application that helps you plan your travel itineraries efficiently. You can add destinations, activities, accommodations, and transportation details to your itineraries and manage them conveniently.</p>
+            <h3 class="fw-normal">{{ 'About Travel Itinerary Manager' }}</h3>
+            <p class="fst-italic">{{ 'This is a web application that helps you plan your travel itineraries efficiently. You can add destinations, activities, accommodations, and transportation details to your itineraries and manage them conveniently.' }}</p>
         </section>
 
     </main>
     <footer>
-        <p>2024 Travel Itinerary Manager</p>
+        <p>{{ '2024 Travel Itinerary Manager' }}</p>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
