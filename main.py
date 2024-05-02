@@ -4,7 +4,6 @@ from datamanager.sqlite_data_manager import *
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_bootstrap import Bootstrap
 from flask_babel import Babel
-from google.cloud import translate_v2 as translate
 import secrets
 import string
 import logging
@@ -86,45 +85,39 @@ def set_language(language):
 
     return redirect(request.referrer or url_for('index'))
 
-
-API_KEY = os.environ.get('GOOGLE_TRANSLATE_API_KEY')
-url = 'https://translation.googleapis.com/language/translate/v2?key={API_KEY}'
-
-
-@app.route('/')
-def translate():
-    text_to_translate = request.args.get('text', default='', type=str)
-    target_language = request.args.get('target_language', default='', type=str)
-
-    if text_to_translate and target_language:
-        translated_text = translate_text(text_to_translate, target_language)
-        if translated_text:
-            return f"Translated text: {translated_text}"
-        else:
-            return "Translation request failed", 500
-    else:
-        return "Please provide text and target_language parameters", 400
-
-
-def translate_text(text, target_language):
-    params = {
-        'key': API_KEY,
-        'q': text,
-        'target': target_language
-    }
-    response = requests.post(url, params=params)
-    if response.status_code == 200:
-        translated_text = response.json()['data']['translations'][0]['translatedText']
-        return translated_text
-    else:
-        print(f"Translation request failed: {response.text}")
-        return None
-
-
-text_to_translate = "Hello, world!"
-target_language = "fr"  # French
-translated_text = translate_text(text_to_translate, target_language)
-print(translated_text)
+#
+# @app.route('/')
+# def translate():
+#     text_to_translate = request.args.get('text', default='', type=str)
+#     target_language = request.args.get('target_language', default='', type=str)
+#
+#     if text_to_translate and target_language:
+#         API_KEY = os.environ.get('GOOGLE_TRANSLATE_API_KEY')
+#         url = url_for('translate', _external=True, text=text_to_translate,target_language=target_language)
+#         #url = f'https://translation.googleapis.com/language/translate/v2?key={API_KEY}&q={text_to_translate}&target={target_language}'
+#
+#         translated_text = translate_text(text_to_translate, target_language, API_KEY, url)
+#         if translated_text:
+#             return f"Translated text: {translated_text}"
+#         else:
+#             return "Translation request failed", 500
+#     else:
+#         return "Please provide text and target_language parameters", 400
+#
+#
+# def translate_text(text, target_language, API_KEY, url):
+#     params = {
+#         'key': API_KEY,
+#         'q': text,
+#         'target': target_language
+#     }
+#     response = requests.post(url, params=params)
+#     if response.status_code == 200:
+#         translated_text = response.json()['data']['translations'][0]['translatedText']
+#         return translated_text
+#     else:
+#         print(f"Translation request failed: {response.text}")
+#         return None
 
 
 @login_manager.user_loader
