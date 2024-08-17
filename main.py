@@ -247,38 +247,49 @@ def delete_destination(user_id, destination_id):
         return f"An error occurred: {str(e)}", 500
 
 
-@app.route('/update_destination/<int:user_id>/<int:destination_id>', methods=['GET', 'POST'])
+@app.route('/update_destination/<int:destination_id>', methods=['GET', 'POST'])
 @login_required
-def update_destination(user_id, destination_id):
-    # Get the destination data
-    destination = data_manager.get_destinations(user_id, destination_id)
+def update_destination(destination_id):
+    print(f"Updating destination with ID: {destination_id}")
+
+    # Fetch the destination by user ID and destination ID
+    destination = data_manager.get_destination_by_id(destination_id)
     if not destination:
-        return "Destination not found."
+        return jsonify({'message': "Destination not found."}), 404
 
     if request.method == 'POST':
         print("Form data:", request.form)
-        new_poster = request.form.get('poster_url')
-        new_activities = request.form.get('activities')
-        new_accommodations = request.form.get('accommodations')
-        new_transportation = request.form.get('transportation')
 
-        # if new_poster is None or not new_poster.strip():
-        #     print("New Poster URL is empty.")
-        #     return "New Poster URL cannot be empty.", 400
-        #
-        # try:
-        #     data_manager.update_destination(user_id, destination_id, new_poster, new_activities, new_accommodations, new_transportation)
-        #     return redirect(url_for('get_destinations', user_id=user_id))
-        #
-        # except ValueError as e:
-        #     return str(e), 400
-        updated = data_manager.update_destination(user_id, destination_id, new_poster, new_activities, new_accommodations, new_transportation)
-        if updated:
-            return redirect(url_for('get_destination', user_id=user_id))
+        # Check if the form data is empty
+        if not request.form:
+            print("No data received from the form.")
         else:
-            return "Destination not found", 404
+            print("Received form data.")
 
-    return render_template('update_destination.html', user_id=user_id, destination=destination)
+        # Extract updated data from the form
+        updated_data = {
+            'poster_url': request.form.get('poster_url', '').strip(),
+            'activities': request.form.get('activities', '').strip(),
+            'accommodations': request.form.get('accommodations', '').strip(),
+            'transportation': request.form.get('transportation', '').strip()
+        }
+
+        print("Updated data:", updated_data)
+
+        if not updated_data['poster_url']:
+            print("New Poster URL is empty.")
+            return "New Poster URL cannot be empty.", 400
+
+        try:
+            updated = data_manager.update_destination(destination_id, updated_data)
+            if updated:
+                return redirect(url_for('get_destinations'))
+            else:
+                return "Failed to update destination.", 404
+        except ValueError as e:
+            return str(e), 400
+
+    return render_template('update_destination.html', destination=destination)
 
 
 if __name__ == "__main__":

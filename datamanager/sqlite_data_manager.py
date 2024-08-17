@@ -52,18 +52,33 @@ class SQLiteDataManager(DataManagerInterface):
         print("Destination deleted successfully.")
         return True
 
-    def update_destination(self, user_id, destination_id, new_poster, new_activities, new_accommodations, new_transportation):
-        """Update an existing destination."""
-        existing_destination = Destination.query.filter_by(user_id=user_id, id=destination_id).first()
-        if not existing_destination:
-            return False
+    def get_destination_by_id(self, destination_id):
+        """Retrieve a destination by its ID."""
+        return Destination.query.get(destination_id)
 
-        existing_destination.poster_url = new_poster
-        existing_destination.activities = new_activities
-        existing_destination.accommodations = new_accommodations
-        existing_destination.transportation = new_transportation
-        self.db.session.commit()
-        print("Destination updated successfully.")
+    def update_destination(self, destination_id, updated_data):
+        """Update an existing destination."""
+        try:
+            existing_destination = Destination.query.get(destination_id)
+            if not existing_destination:
+                return False
+
+            # Update only if the data is not empty
+            if updated_data.get('poster_url'):
+                existing_destination.poster_url = updated_data['poster_url']
+            if updated_data.get('activities'):
+                existing_destination.activities = updated_data['activities']
+            if updated_data.get('accommodations'):
+                existing_destination.accommodations = updated_data['accommodations']
+            if updated_data.get('transportation'):
+                existing_destination.transportation = updated_data['transportation']
+
+            self.db.session.commit()
+            print("Destination updated successfully.")
+            return True
+        except Exception as e:
+            print(f"Error updating destination: {e}")
+            return False
 
 
 

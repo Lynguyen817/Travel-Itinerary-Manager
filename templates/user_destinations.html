@@ -30,7 +30,7 @@
                         <form class="delete" action="/delete_destination/{{ current_user.id }}/{{ destination.id }}" method="POST">
                             <button  class="delete_button" type="submit">Delete</button>
                         </form>
-                        <form class="update" action="/update_destination/{{ current_user.id }}/{{ destination.id }}" method="POST">
+                        <form class="update" action="/update_destination/{{ destination.id }}" method="GET">
                             <button class="update_button" type="submit">Update</button>
                         </form>
                     </div>

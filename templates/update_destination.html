@@ -11,18 +11,19 @@
 <body class="update-destination">
     <div class="container">
         <h1>Update Destination</h1>
-        <form method="POST" action="/update_destination/{{ user_id }}/{{ destination.id }}">
-            <label for="new_poster">New Poster URL</label>
-            <textarea id="new_poster" name="new_poster">{{ destination.poster_url }}</textarea>
+        <form method="POST" action="/update_destination/{{ destination.id }}">
+            <label for="poster_url">New Poster URL</label>
+            <input type="text" id="poster_url" name="poster_url" value="{{ destination.poster_url }}">
 
-            <label for="new_activities">New Activities</label>
-            <textarea id="new_activities" name="new_activities">{{ destination.activities }}</textarea>
 
-            <label for="new_accommodations">New Accommodations</label>
-            <textarea id="new_accommodations" name="new_accommodations">{{ destination.accommodations }}</textarea>
+            <label for="activities">Activities</label>
+            <textarea id="activities" name="activities" placeholder="List activities">{{ destination.activities }}</textarea>
 
-            <label for="new_transportation">New Transportations</label>
-            <textarea id="new_transportation" name="new_transportation">{{ destination.transportation }}</textarea>
+            <label for="accommodations">Accommodation</label>
+            <textarea id="accommodations" name="accommodations" placeholder="Accommodations">{{ destination.accommodations }}</textarea>
+
+            <label for="transportation">Activities</label>
+            <textarea id="transportation" name="transportation" placeholder="Transportation details">{{ destination.transportation }}</textarea>
 
             <input type="submit" value="Update">
         </form>
